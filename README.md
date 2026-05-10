@@ -1,25 +1,39 @@
-# Perplexity MCP Server
+<div align="center">
 
-A Model Context Protocol (MCP) server that provides intelligent code analysis and debugging capabilities using Perplexity AI's API. Works seamlessly with the Claude desktop client.
+# 🔍 Perplexity MCP Server
+
+**Perplexity-backed code analysis and debugging — straight from your Claude conversation.**
+
+A Model Context Protocol (MCP) server that lets Claude (or any MCP client) ask Perplexity AI for code analysis, error explanations, and debugging help.
+
+[![MCP](https://img.shields.io/badge/MCP-Server-d97757)](https://modelcontextprotocol.io)
+[![Stars](https://img.shields.io/github/stars/joewilsonai/mcp-perplexity-server?style=social)](https://github.com/joewilsonai/mcp-perplexity-server/stargazers)
+[![Node](https://img.shields.io/badge/Node-18+-339933?logo=node.js)](https://nodejs.org)
+[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
 
 <a href="https://glama.ai/mcp/servers/oxchzx8c75"><img width="380" height="200" src="https://glama.ai/mcp/servers/oxchzx8c75/badge" alt="Perplexity Server MCP server" /></a>
 
+</div>
+
+---
+
 ## Features
 
-- **Intelligent Error Analysis**: Detailed breakdown of coding errors with root cause analysis
-- **Pattern Detection**: Automatically recognizes common error patterns and provides targeted solutions
-- **Comprehensive Solutions**: Step-by-step fixes with multiple implementation alternatives
-- **Best Practices**: Includes coding standards and error prevention tips
-- **Python Support**: Specialized handling of Python type errors and common coding issues
+- 🐛 **Intelligent Error Analysis** — Root-cause breakdown of coding errors
+- 🔬 **Pattern Detection** — Recognizes common error patterns and provides targeted solutions
+- ✅ **Comprehensive Solutions** — Step-by-step fixes with multiple implementation alternatives
+- 📚 **Best Practices** — Coding standards and error-prevention tips
+- 🐍 **Python Support** — Specialized handling of Python type errors and common issues
 
-## Example Usage
+## Example usage
 
-Ask questions like:
-- "Fix this TypeError in my Python code"
-- "What's causing this error message?"
-- "How do I fix this code?"
+Ask Claude:
 
-Include your code snippet for targeted analysis:
+> *"Fix this TypeError in my Python code"*
+> *"What's causing this error message?"*
+> *"How do I fix this code?"*
+
+Include your code snippet:
 
 ```python
 def calculate_total(items):
@@ -35,124 +49,66 @@ data = [
 result = calculate_total(data)
 ```
 
-The server will provide:
-1. Root cause analysis of the error
-2. Step-by-step solution with code examples
-3. Best practices to prevent similar issues
-4. Alternative implementation approaches
+The server returns:
 
-## Installation
+1. **Root-cause analysis** of the error
+2. **Step-by-step solution** with code examples
+3. **Best practices** to prevent the same issue
+4. **Alternative implementations**
 
-### Prerequisites
-- Node.js 18 or higher
-- A Perplexity AI API key
+## Install
 
-### Option 1: Install from npm (Recommended)
+### From npm (recommended)
 
 ```bash
-# Using npm
-npm install -g perplexity-mcp
-
-# Or using the repository directly
-npm install -g git+https://github.com/yourusername/perplexity-mcp.git
+npm install -g mcp-perplexity-server
 ```
 
-### Option 2: Install from Source
+### From source
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/perplexity-server.git
-cd perplexity-server
-```
-
-2. Install dependencies:
-```bash
+git clone https://github.com/joewilsonai/mcp-perplexity-server
+cd mcp-perplexity-server
 npm install
-```
-
-3. Build and install globally:
-```bash
 npm run build
-npm install -g .
 ```
 
-### Configure Claude Desktop
+## Configure in Claude Desktop
 
-
-Add to your Claude desktop configuration file:
-
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "perplexity": {
-      "command": "perplexity-mcp",
-      "args": [],
-      "env": {
-        "PERPLEXITY_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
-
-Or if installed from source:
+Edit `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "perplexity": {
       "command": "node",
-      "args": ["/absolute/path/to/perplexity-server/build/index.js"],
+      "args": ["/absolute/path/to/mcp-perplexity-server/build/index.js"],
       "env": {
-        "PERPLEXITY_API_KEY": "your-api-key-here"
+        "PERPLEXITY_API_KEY": "your-perplexity-api-key"
       }
     }
   }
 }
 ```
 
-## Security
+Get a Perplexity API key at [perplexity.ai/settings/api](https://perplexity.ai/settings/api).
 
-- The API key is stored securely in Claude's desktop configuration file
-- The key is passed to the server as an environment variable
-- No sensitive data is stored in the repository
-- The server expects the API key to be provided by Claude's environment
+## Prerequisites
 
-## Development
+- **Node.js 18 or higher**
+- **A Perplexity AI API key**
 
-### Project Structure
+## Stack
 
-```
-perplexity-server/
-├── src/
-│   └── index.ts      # Main server implementation
-├── package.json      # Project configuration
-└── tsconfig.json    # TypeScript configuration
-```
+- **TypeScript** + **Node.js 18+**
+- **@modelcontextprotocol/sdk**
+- **Perplexity API**
 
-### Available Scripts
+## Related MCP servers
 
-- `npm run build`: Build the project
-- `npm run watch`: Watch for changes and rebuild automatically
-- `npm run prepare`: Prepare the package for publishing
-- `npm run inspector`: Run the MCP inspector for debugging
-
-### Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- 🧠 **[second-opinion-mcp-server](https://github.com/joewilsonai/second-opinion-mcp-server)** (⭐ 16) — Multi-source: Gemini + Perplexity + Stack Overflow
+- 🐙 **[github-meta-mcp-server](https://github.com/joewilsonai/github-meta-mcp-server)** — Natural-language GitHub repo management
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Thanks to [Perplexity AI](https://www.perplexity.ai/) for their powerful API
-- Built with [Model Context Protocol](https://github.com/anthropics/model-context-protocol)
+MIT
