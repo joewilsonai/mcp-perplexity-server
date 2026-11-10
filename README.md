@@ -1,81 +1,43 @@
-<div align="center">
+# Perplexity MCP Server
 
-# 🔍 Perplexity MCP Server
+**Perplexity-backed code analysis and debugging, straight from your Claude conversation.**
 
-**Perplexity-backed code analysis and debugging — straight from your Claude conversation.**
-
-A Model Context Protocol (MCP) server that lets Claude (or any MCP client) ask Perplexity AI for code analysis, error explanations, and debugging help.
-
-[![MCP](https://img.shields.io/badge/MCP-Server-d97757)](https://modelcontextprotocol.io)
-[![Stars](https://img.shields.io/github/stars/joewilsonai/mcp-perplexity-server?style=social)](https://github.com/joewilsonai/mcp-perplexity-server/stargazers)
-[![Node](https://img.shields.io/badge/Node-18+-339933?logo=node.js)](https://nodejs.org)
-[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+A small [Model Context Protocol](https://modelcontextprotocol.io) server that gives Claude Desktop (or any MCP client) one tool: send an error or coding question, plus optional code, to the Perplexity API and get back a structured answer.
 
 <a href="https://glama.ai/mcp/servers/oxchzx8c75"><img width="380" height="200" src="https://glama.ai/mcp/servers/oxchzx8c75/badge" alt="Perplexity Server MCP server" /></a>
 
-</div>
+## Status
 
----
+Last updated May 2026. Checked in November 2026: `npm ci` and `npm run build` succeed and the server starts and lists its tool. **Live answers from Perplexity will not work as shipped.** The code asks for the model `llama-3.1-sonar-huge-128k-online`, which [Perplexity's changelog](https://docs.perplexity.ai/changelog/changelog) says stopped being available on February 22, 2025. Perplexity now offers the Sonar models instead.
 
-## Features
+## Tool
 
-- 🐛 **Intelligent Error Analysis** — Root-cause breakdown of coding errors
-- 🔬 **Pattern Detection** — Recognizes common error patterns and provides targeted solutions
-- ✅ **Comprehensive Solutions** — Step-by-step fixes with multiple implementation alternatives
-- 📚 **Best Practices** — Coding standards and error-prevention tips
-- 🐍 **Python Support** — Specialized handling of Python type errors and common issues
+### `search`
 
-## Example usage
+| Argument | Required | Description |
+|---|---|---|
+| `query` | yes | The error message or coding question |
+| `code` | no | A code snippet to analyze |
+| `language` | no | Language of the snippet, default `auto` |
 
-Ask Claude:
+The answer comes back in four sections: root cause analysis, step-by-step solution, best practices for prevention, and code examples (before, after, alternatives).
 
-> *"Fix this TypeError in my Python code"*
-> *"What's causing this error message?"*
-> *"How do I fix this code?"*
-
-Include your code snippet:
-
-```python
-def calculate_total(items):
-    total = 0
-    for item in items:
-        total = total + item['price']  # TypeError: string + int
-
-data = [
-    {'name': 'Book', 'price': '10'},
-    {'name': 'Pen', 'price': '2'}
-]
-
-result = calculate_total(data)
-```
-
-The server returns:
-
-1. **Root-cause analysis** of the error
-2. **Step-by-step solution** with code examples
-3. **Best practices** to prevent the same issue
-4. **Alternative implementations**
+One built-in shortcut: if the code contains `item['price']`, or adds a quoted value to a number, the server returns a prewritten answer about a Python string-plus-integer `TypeError` without calling Perplexity, whatever the question was.
 
 ## Install
 
-### From npm (recommended)
-
-```bash
-npm install -g mcp-perplexity-server
-```
-
-### From source
+There is no npm package. Build from source with Node 18 or newer:
 
 ```bash
 git clone https://github.com/joewilsonai/mcp-perplexity-server
 cd mcp-perplexity-server
-npm install
+npm ci
 npm run build
 ```
 
-## Configure in Claude Desktop
+## Configure Claude Desktop
 
-Edit `claude_desktop_config.json`:
+Add this to `claude_desktop_config.json`, with the absolute path to your clone and your own key:
 
 ```json
 {
@@ -84,31 +46,19 @@ Edit `claude_desktop_config.json`:
       "command": "node",
       "args": ["/absolute/path/to/mcp-perplexity-server/build/index.js"],
       "env": {
-        "PERPLEXITY_API_KEY": "your-perplexity-api-key"
+        "PERPLEXITY_API_KEY": "<your-perplexity-api-key>"
       }
     }
   }
 }
 ```
 
-Get a Perplexity API key at [perplexity.ai/settings/api](https://perplexity.ai/settings/api).
+The key is read from the `PERPLEXITY_API_KEY` environment variable only; the server will not start without it. Get a key from your [Perplexity API settings](https://www.perplexity.ai/settings/api).
 
-## Prerequisites
+## Built with
 
-- **Node.js 18 or higher**
-- **A Perplexity AI API key**
-
-## Stack
-
-- **TypeScript** + **Node.js 18+**
-- **@modelcontextprotocol/sdk**
-- **Perplexity API**
-
-## Related MCP servers
-
-- 🧠 **[second-opinion-mcp-server](https://github.com/joewilsonai/second-opinion-mcp-server)** (⭐ 16) — Multi-source: Gemini + Perplexity + Stack Overflow
-- 🐙 **[github-meta-mcp-server](https://github.com/joewilsonai/github-meta-mcp-server)** — Natural-language GitHub repo management
+TypeScript, `@modelcontextprotocol/sdk` 0.6.0 and axios.
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).
